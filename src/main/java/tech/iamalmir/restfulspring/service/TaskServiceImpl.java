@@ -2,6 +2,8 @@ package tech.iamalmir.restfulspring.service;
 
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import tech.iamalmir.restfulspring.model.Task;
@@ -18,6 +20,11 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Flux<Task> getAllTasks() {
         return taskRepository.findAll();
+    }
+
+    @Override
+    public Mono<Task> getTaskById(UUID id) {
+        return taskRepository.findById(id);
     }
 
     @Override
