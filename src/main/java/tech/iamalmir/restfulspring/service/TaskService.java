@@ -12,4 +12,8 @@ public interface TaskService {
     Mono<Task> getTaskById(UUID id);
 
     Mono<Task> createTask(Task task);
+
+    Mono<Task> updateTask(UUID id, Task task);
+
+    Mono<Void> deleteTask(UUID id);
 }

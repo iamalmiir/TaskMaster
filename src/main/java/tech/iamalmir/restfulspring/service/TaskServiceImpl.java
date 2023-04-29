@@ -36,4 +36,22 @@ public class TaskServiceImpl implements TaskService {
 
         return taskRepository.save(newTask);
     }
+
+    @Override
+    public Mono<Task> updateTask(UUID id, Task task) {
+        return taskRepository.findById(id)
+                .flatMap(existingTask -> {
+                    existingTask.setTitle(task.getTitle() != null ? task.getTitle() : existingTask.getTitle());
+                    existingTask.setTaskDescription(task.getTaskDescription() != null ? task.getTaskDescription() : existingTask.getTaskDescription());
+                    existingTask.setCompleted(task.isCompleted() != existingTask.isCompleted() ? task.isCompleted() : existingTask.isCompleted());
+                    return taskRepository.save(existingTask);
+                });
+    }
+
+
+    @Override
+    public Mono<Void> deleteTask(UUID id) {
+        return taskRepository.deleteById(id);
+    }
+
 }

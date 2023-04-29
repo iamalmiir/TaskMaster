@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import tech.iamalmir.restfulspring.model.Task;
 
+
 @Repository
 public interface TaskRepository extends ReactiveCrudRepository<Task, UUID> {
 }
