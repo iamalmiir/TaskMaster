@@ -16,8 +16,6 @@ This is a simple and intuitive To Do App that allows you to create and manage ta
 
 ## Installation
 
-Sure, here are the installation instructions for your WebFlux functional To Do App:
-
 1. Clone the repository to your local machine.
 2. Make sure you have Java 11 or higher installed on your machine.
 3. Make sure you have Maven installed on your machine.
