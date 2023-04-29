@@ -1,6 +1,9 @@
 # TaskMaster
 
-This is a simple and intuitive To Do App that allows you to create and manage tasks easily.
+This is a To Do App built with Spring Boot WebFlux, R2DBC, and PostgreSQL. The app showcases the use
+of Spring Boot WebFlux and R2DBC to build reactive applications. It features a RESTful API built
+with Spring WebFlux functional endpoints that handle requests. The app uses R2DBC to connect to a
+PostgreSQL database, making it an efficient and reliable choice for building reactive applications.
 
 ## Table of Contents
 
