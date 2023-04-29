@@ -7,8 +7,9 @@ PostgreSQL database, making it an efficient and reliable choice for building rea
 
 ## Table of Contents
 
-- [Installation](#installation)
 - [Usage](#usage)
+- [Requirements](#requirements)
+- [Installation](#installation)
 
 # Usage
 
