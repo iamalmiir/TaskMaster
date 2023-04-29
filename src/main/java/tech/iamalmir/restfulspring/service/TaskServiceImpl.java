@@ -19,16 +19,35 @@ public class TaskServiceImpl implements TaskService {
         this.taskRepository = taskRepository;
     }
 
+
+    /**
+     * Get all tasks from database
+     *
+     * @return {@link Flux<Task>}
+     */
     @Override
     public Flux<Task> getAllTasks() {
         return taskRepository.findAll();
     }
 
+
+    /**
+     * Get task by id from database
+     *
+     * @param id {@link UUID}
+     * @return {@link Mono<Task>}
+     */
     @Override
     public Mono<Task> getTaskById(UUID id) {
         return taskRepository.findById(id).switchIfEmpty(Mono.error(new TaskNotFoundException(id)));
     }
 
+    /**
+     * Create task in database
+     *
+     * @param task {@link Task}
+     * @return {@link Mono<Task>}
+     */
     @Override
     public Mono<Task> createTask(@Valid Task task) {
         Task newTask = Task.builder()
@@ -39,6 +58,16 @@ public class TaskServiceImpl implements TaskService {
         return taskRepository.save(newTask);
     }
 
+    /**
+     * Update task in database
+     * If task not found, return Mono Error with {@link TaskNotFoundException}
+     * If task found, update task and return {@link Mono<Task>}
+     * If task found, but no changes, return {@link Mono<Task>}
+     *
+     * @param id   {@link UUID}
+     * @param task {@link Task}
+     * @return {@link Mono<Task>}
+     */
     @Override
     public Mono<Task> updateTask(UUID id, Task task) {
         return taskRepository.findById(id)
@@ -51,6 +80,14 @@ public class TaskServiceImpl implements TaskService {
                 });
     }
 
+    /**
+     * Delete task from database
+     * If task not found, return Mono Error with {@link TaskNotFoundException}
+     * If task found, delete task and return {@link Mono<Void>}
+     *
+     * @param id {@link UUID}
+     * @return {@link Mono<Void>}
+     */
     @Override
     public Mono<Void> deleteTask(UUID id) {
         // if task not found, return Mono.error
