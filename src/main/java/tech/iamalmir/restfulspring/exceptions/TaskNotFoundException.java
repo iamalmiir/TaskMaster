@@ -1,8 +1,9 @@
 package tech.iamalmir.restfulspring.exceptions;
 
-public class TaskNotFoundException extends RuntimeException {
+import java.util.UUID;
 
-    public TaskNotFoundException() {
-        super("Task not found.");
+public class TaskNotFoundException extends RuntimeException {
+    public TaskNotFoundException(UUID id) {
+        super("Task not found - ID: " + id);
     }
 }

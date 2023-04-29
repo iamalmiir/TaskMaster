@@ -1,7 +1,6 @@
 package tech.iamalmir.restfulspring.controller;
 
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -10,7 +9,7 @@ import java.util.UUID;
 
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
-import tech.iamalmir.restfulspring.exceptions.TaskNotFoundException;
+import tech.iamalmir.restfulspring.exceptions.GlobalExceptionHandler;
 import tech.iamalmir.restfulspring.model.Task;
 import tech.iamalmir.restfulspring.service.TaskService;
 
@@ -18,9 +17,11 @@ import tech.iamalmir.restfulspring.service.TaskService;
 @Component
 public class TaskController {
     private final TaskService taskService;
+    private final GlobalExceptionHandler globalExceptionHandler;
 
-    public TaskController(TaskService taskService) {
+    public TaskController(TaskService taskService, GlobalExceptionHandler globalExceptionHandler) {
         this.taskService = taskService;
+        this.globalExceptionHandler = globalExceptionHandler;
     }
 
     /**
@@ -30,8 +31,11 @@ public class TaskController {
      * @return {@link Mono<ServerResponse>}
      */
     public Mono<ServerResponse> all(ServerRequest req) {
-        return ServerResponse.ok().body(taskService.getAllTasks(), Task.class);
+        return taskService.getAllTasks()
+                .collectList()
+                .flatMap(tasks -> ServerResponse.ok().bodyValue(tasks));
     }
+
 
     /**
      * Get task by id
@@ -41,8 +45,7 @@ public class TaskController {
      */
     public Mono<ServerResponse> getById(ServerRequest req) {
         return taskService.getTaskById(UUID.fromString(req.pathVariable("id")))
-                .flatMap(task -> ServerResponse.ok().bodyValue(task))
-                .switchIfEmpty(Mono.error(new TaskNotFoundException()));
+                .flatMap(task -> ServerResponse.ok().bodyValue(task));
     }
 
     /**
@@ -54,12 +57,7 @@ public class TaskController {
     public Mono<ServerResponse> create(ServerRequest req) {
         return req.bodyToMono(Task.class)
                 .flatMap(taskService::createTask)
-                .flatMap(task -> ServerResponse.ok().bodyValue(task))
-                .onErrorResume(err -> {
-                    log.error("Error: {}", err.getMessage());
-                    return ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                            .bodyValue("Something went wrong");
-                });
+                .flatMap(task -> ServerResponse.ok().bodyValue(task));
     }
 
     /**
@@ -71,17 +69,7 @@ public class TaskController {
     public Mono<ServerResponse> update(ServerRequest req) {
         return req.bodyToMono(Task.class)
                 .flatMap(task -> taskService.updateTask(UUID.fromString(req.pathVariable("id")), task))
-                .flatMap(task -> ServerResponse.ok().bodyValue(task))
-                .switchIfEmpty(ServerResponse.notFound().build())
-                .onErrorResume(err -> {
-                    log.error("Error: {}", err.getMessage());
-                    if (err instanceof IllegalArgumentException) {
-                        return ServerResponse.badRequest().bodyValue("Invalid task ID");
-                    } else {
-                        return ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                .bodyValue("Something went wrong");
-                    }
-                });
+                .flatMap(task -> ServerResponse.ok().bodyValue(task));
     }
 
     /**
@@ -92,16 +80,6 @@ public class TaskController {
      */
     public Mono<ServerResponse> delete(ServerRequest req) {
         return taskService.deleteTask(UUID.fromString(req.pathVariable("id")))
-                .then(Mono.defer(() -> ServerResponse.ok().build()))
-                .switchIfEmpty(ServerResponse.notFound().build())
-                .onErrorResume(err -> {
-                    log.error("Error: {}", err.getMessage());
-                    if (err instanceof IllegalArgumentException) {
-                        return ServerResponse.badRequest().bodyValue("Invalid task ID");
-                    } else {
-                        return ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                .bodyValue("Server error.");
-                    }
-                });
+                .then(Mono.defer(() -> ServerResponse.ok().build()));
     }
 }
