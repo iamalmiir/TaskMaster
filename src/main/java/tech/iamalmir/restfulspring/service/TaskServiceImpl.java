@@ -83,7 +83,7 @@ public class TaskServiceImpl implements TaskService {
     /**
      * Delete task from database
      * If task not found, return Mono Error with {@link TaskNotFoundException}
-     * If task found, delete task and return {@link Mono<Void>}
+     * If task found, delete task
      *
      * @param id {@link UUID}
      * @return {@link Mono<Void>}
@@ -95,5 +95,4 @@ public class TaskServiceImpl implements TaskService {
                 .switchIfEmpty(Mono.error(new TaskNotFoundException(id)))
                 .flatMap(taskRepository::delete);
     }
-
 }
