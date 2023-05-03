@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
-import tech.iamalmir.restfulspring.model.Task;
+import tech.iamalmir.restfulspring.models.Task;
 
 
 @Repository

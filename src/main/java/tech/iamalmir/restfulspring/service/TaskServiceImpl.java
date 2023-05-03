@@ -8,7 +8,7 @@ import jakarta.validation.Valid;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import tech.iamalmir.restfulspring.exceptions.TaskNotFoundException;
-import tech.iamalmir.restfulspring.model.Task;
+import tech.iamalmir.restfulspring.models.Task;
 import tech.iamalmir.restfulspring.repository.TaskRepository;
 
 @Service

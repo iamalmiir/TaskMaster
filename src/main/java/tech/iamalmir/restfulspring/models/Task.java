@@ -1,4 +1,4 @@
-package tech.iamalmir.restfulspring.model;
+package tech.iamalmir.restfulspring.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -12,6 +12,7 @@ import org.springframework.data.relational.core.mapping.Table;
 import java.time.Instant;
 import java.util.UUID;
 
+import jakarta.persistence.GeneratedValue;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,9 +28,9 @@ public class Task {
 
     @Id
     @Column("id")
+    @GeneratedValue
     private UUID id;
 
-    @JsonIgnore
     @Column("slug")
     private String slug;
 

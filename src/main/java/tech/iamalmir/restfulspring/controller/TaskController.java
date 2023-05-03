@@ -9,19 +9,16 @@ import java.util.UUID;
 
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
-import tech.iamalmir.restfulspring.exceptions.GlobalExceptionHandler;
-import tech.iamalmir.restfulspring.model.Task;
+import tech.iamalmir.restfulspring.models.Task;
 import tech.iamalmir.restfulspring.service.TaskService;
 
 @Slf4j
 @Component
 public class TaskController {
     private final TaskService taskService;
-    private final GlobalExceptionHandler globalExceptionHandler;
 
-    public TaskController(TaskService taskService, GlobalExceptionHandler globalExceptionHandler) {
+    public TaskController(TaskService taskService) {
         this.taskService = taskService;
-        this.globalExceptionHandler = globalExceptionHandler;
     }
 
     /**
