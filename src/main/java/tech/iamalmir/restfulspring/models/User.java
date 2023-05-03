@@ -50,6 +50,14 @@ public class User {
     @Max(32)
     private String password;
 
+    @Column("provider_id")
+    @JsonIgnore
+    private String providerId;
+
+    @Column("picture_url")
+    @JsonIgnore
+    private String providerUrl;
+
     @Column("created_at")
     @JsonIgnore
     @CreatedDate
